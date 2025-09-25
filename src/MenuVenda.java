@@ -1,6 +1,5 @@
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -81,35 +80,45 @@ public class MenuVenda {
         }
     }
 
-    private static void itemExcluir(Scanner sc, List<ItemVenda> listaItemVenda) {
-        System.out.print("Informe o código do item a ser excluído: ");
-        int codigoItem = sc.nextInt();
+    private static void itemExcluir(Scanner sc, List<Venda> listaVenda, List<ItemVenda> listaItemVenda) {
+        Venda venda = findVenda(sc, listaVenda);
 
-        boolean encontrado = false;
+        if (venda != null){
+            //a venda tem pelo menos 1 item
+            if (venda.getItens().size() > 0){
+                System.out.print("Informe o código do item a ser excluído: ");
+                int codigoItem = sc.nextInt();
 
-        /*for (int i = 0; i < listaItemVenda.size(); i++) {
-            ItemVenda itemVenda = listaItemVenda.get(i);
-            if (codigoItem == itemVenda.getCodigo()) {
-                encontrado = true;
-                listaItemVenda.remove(itemVenda);
-                exibirResumo(vendaGlobal);
-                break;
+                for (int i = 0; i < listaItemVenda.size(); i++) {
+                    ItemVenda itemVenda = listaItemVenda.get(i);
+                    if (codigoItem == itemVenda.getCodigo()) {
+                        venda.removerItem(itemVenda);
+                        break;
+                    }
+                }
+            } else {
+                System.out.println("Não existe itens para a venda informada.");
             }
-        }*/
 
-        Iterator<ItemVenda> it = listaItemVenda.iterator();
-        while (it.hasNext()) {
-            ItemVenda item = it.next();
-            if (item.getCodigo() == codigoItem) {
-                it.remove();
-                encontrado = true;
-                //exibirResumo(vendaGlobal);
-                break;
-            }
+        } else {
+            System.out.println("Não existe venda para o código informado!");
         }
 
-        if (!encontrado) {
-            System.out.println("Código do item não encontrado!");
+    }
+
+    private static void listarItem(Scanner sc, List<Venda> listaVenda){
+        Venda venda = findVenda(sc, listaVenda);
+
+        if (venda != null){
+            //a venda tem pelo menos 1 item
+            if (venda.getItens().size() > 0){
+                exibirResumo(venda);
+            } else {
+                System.out.println("Não existe itens para a venda informada.");
+            }
+
+        } else {
+            System.out.println("Não existe venda para o código informado!");
         }
     }
 
@@ -216,7 +225,7 @@ public class MenuVenda {
             System.out.println("1 - Criar Pedido");
             System.out.println("2 - Adicionar Item(s)");
             System.out.println("3 - Remover Item(s)");
-            System.out.println("4 - Alterar Quantidade");
+            System.out.println("4 - Listar Item(s)");
             System.out.println("5 - Finalizar pedido");
             System.out.println("6 - Pagamento");
             System.out.println("7 - Entrega");
@@ -244,11 +253,11 @@ public class MenuVenda {
                     //exibirResumo(vendaGlobal);
                     break;
                 case 3:
-                    itemExcluir(sc, listaItemVenda);
+                    itemExcluir(sc, listaVenda, listaItemVenda);
                     //exibirResumo(vendaGlobal);
                     break;
                 case 4:
-                    System.out.println("Alterar quantidade");
+                    listarItem(sc, listaVenda);
                     break;
                 case 5:
                     finalizarVenda(sc, listaVenda);

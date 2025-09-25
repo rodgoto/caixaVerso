@@ -20,6 +20,10 @@ public class Venda {
         return item;
     }
 
+    public void removerItem(ItemVenda item) {
+        itens.remove(item);
+    }
+
     public Venda(Cliente cliente, LocalDateTime dataHora, String status) {
         this.codigo = proximoCodigo++;
         this.cliente = cliente;
