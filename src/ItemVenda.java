@@ -1,27 +1,33 @@
-import java.math.BigDecimal;
-
 public class ItemVenda {
+    private int codigo;
     private Produto produto;
     private int quantidade;
-    private BigDecimal valor;
-    private BigDecimal valorVenda;
+    private double valor;
+    private double valorVenda;
 
-    public ItemVenda(Produto produto, int quantidade, BigDecimal valor) {
+    public ItemVenda(Produto produto, int quantidade, double valor) {
+        this.codigo = codigo + 1;
         this.produto = produto;
         this.quantidade = quantidade;
         this.valor = valor;
-        this.valorVenda = valor.multiply(new BigDecimal("0.1"));
+        this.valorVenda = valor * 1.1;
     }
 
-    public BigDecimal getSubtotal() {
-        return valorVenda.multiply(new BigDecimal(quantidade));
+    public double getSubtotal() {
+        return valorVenda * quantidade;
+    }
+
+    public int getCodigo() {
+        return codigo;
     }
 
     @Override
     public String toString() {
-        return produto.getNome() + " - Quantidade: " + quantidade +
+        return "Item " + produto.getCodigo() +
+                " - " + produto.getNome() +
+                " - Quantidade: " + quantidade +
                 ", Preço origem: R$ " + valor +
-                ", Preço unitário: R$ " + valorVenda +
+                ", Preço venda: R$ " + valorVenda +
                 ", Subtotal: R$ " + getSubtotal();
     }
 }

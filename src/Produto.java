@@ -1,12 +1,10 @@
-import java.math.BigDecimal;
-
 public class Produto {
 
     private int codigo;
     private String nome;
-    private BigDecimal valor;
+    private double valor;
 
-    public Produto(int codigo, String nome, BigDecimal valor) {
+    public Produto(int codigo, String nome, double valor) {
         this.codigo = codigo;
         this.nome = nome;
         this.valor = valor;
@@ -20,11 +18,11 @@ public class Produto {
         return nome;
     }
 
-    public BigDecimal getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
 

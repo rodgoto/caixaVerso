@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -6,13 +9,16 @@ import java.util.Scanner;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Scanner sc = new Scanner(System.in);
         boolean continuar = true;
-        List<Cliente> listaCliente = new ArrayList<>();
-        List<Produto> listaProduto = new ArrayList<>();
+        Path pathCliente = Paths.get("clientes.csv");
+        Path pathProduto = Paths.get("produtos.csv");
+        List<Cliente> listaCliente = ClienteProcessadorCsv.readFromCsv(pathCliente);
+        List<Produto> listaProduto = ProdutoProcessadorCsv.readFromCsv(pathProduto);
         List<Venda> listaVenda = new ArrayList<>();
+        List<ItemVenda> listaItemVenda = new ArrayList<>();
 
         while (continuar) {
             //monta o menu para escolha
@@ -36,13 +42,13 @@ public class Main {
                     continuar = false;
                     break;
                 case 1:
-                    MenuCliente.subMenuClientes(sc, listaCliente);
+                    MenuCliente.subMenuClientes(sc, listaCliente, pathCliente);
                     break;
                 case 2:
-                    MenuProduto.subMenuProdutos(sc, listaProduto);
+                    MenuProduto.subMenuProdutos(sc, listaProduto, pathProduto);
                     break;
                 case 3:
-                    MenuVenda.subMenuVendas(sc, listaCliente, listaVenda);
+                    MenuVenda.subMenuVendas(sc, listaCliente, listaVenda, listaProduto, listaItemVenda);
                     break;
                 default:
                     System.out.println("Opção inválida.");

@@ -1,26 +1,27 @@
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Venda {
+    private static int proximoCodigo = 1;
     private int codigo;
     private Cliente cliente;
     private LocalDateTime dataHora;
     private String status;
-    private List<ItemVenda> itens;
+    private List<ItemVenda> itens = new ArrayList<>();
 
     public Venda(Cliente cliente) {
         this.cliente = cliente;
-        this.itens = new ArrayList<>();
     }
 
-    public void adicionarItem(Produto produto, int quantidade, BigDecimal precoUnitario) {
-        itens.add(new ItemVenda(produto, quantidade, precoUnitario));
+    public ItemVenda adicionarItem(Produto produto, int quantidade, double precoUnitario) {
+        ItemVenda item = new ItemVenda(produto, quantidade, precoUnitario);
+        itens.add(item);
+        return item;
     }
 
     public Venda(Cliente cliente, LocalDateTime dataHora, String status) {
-        this.codigo = codigo + 1;
+        this.codigo = proximoCodigo++;
         this.cliente = cliente;
         this.dataHora = dataHora;
         this.status = status;
@@ -54,24 +55,18 @@ public class Venda {
         return codigo;
     }
 
-    public void exibirResumo() {
-        System.out.println("Pedido para o cliente: " + cliente.getNome());
-        BigDecimal total = null;
-        for (ItemVenda item : itens) {
-            System.out.println(item);
-            total = total.add(item.getSubtotal());
-        }
-        System.out.println("Total do pedido: R$ " + total);
+    public List<ItemVenda> getItens() {
+        return itens;
     }
 
-    @Override
-    public String toString() {
-        return "Venda{" +
-                "codigo=" + codigo +
-                ", cliente=" + cliente +
-                ", dataHora=" + dataHora +
-                ", status='" + status + '\'' +
-                ", itens=" + itens +
-                '}';
+    public void exibirResumo() {
+        System.out.println("Pedido para o cliente: " + cliente.getNome());
+        double total = 0;
+        for (ItemVenda item : itens) {
+            System.out.println(item);
+            total = total + item.getSubtotal();
+        }
+        System.out.println("Total do pedido: R$ " + total);
+        System.out.println("Status do pedido: " + status);
     }
 }

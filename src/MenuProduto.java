@@ -1,11 +1,12 @@
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuProduto {
 
-    private static void produtoAlterar(Scanner sc, List<Produto> listaProduto) {
+    private static void produtoAlterar(Scanner sc, List<Produto> listaProduto, Path path) throws IOException {
         System.out.print("Informe o código do produto a ser alterado: ");
         int codigoProduto = sc.nextInt();
 
@@ -20,11 +21,14 @@ public class MenuProduto {
                 System.out.print("Nome: ");
                 String nomeProduto = sc.nextLine();
                 System.out.print("Valor R$ ");
-                String valorProdutoStr = sc.nextLine();
-                BigDecimal valorProduto = new BigDecimal(valorProdutoStr);
+                double valorProduto = sc.nextDouble();
                 produto.setNome(nomeProduto);
                 produto.setValor(valorProduto);
                 System.out.println("Produto atualizado com sucesso.");
+
+                //salvar no arquivo
+                CriarCsv.salvarProdutoList(listaProduto, path);
+
                 break;
             }
         }
@@ -40,13 +44,12 @@ public class MenuProduto {
         }
     }
 
-    private static void produtoInserir(Scanner sc, List<Produto> listaProduto){
+    private static void produtoInserir(Scanner sc, List<Produto> listaProduto, Path path) throws IOException {
 
         System.out.print("Nome: ");
         String nomeProduto = sc.nextLine();
         System.out.print("Valor R$ ");
-        String valorProdutoStr = sc.nextLine();
-        BigDecimal valorProduto = new BigDecimal(valorProdutoStr);
+        double valorProduto = sc.nextDouble();
 
         int codigoProduto = 1;
         if (!listaProduto.isEmpty()) {
@@ -57,9 +60,11 @@ public class MenuProduto {
         System.out.println("Produto inserido com sucesso.");
         listaProduto.add(produto);
 
+        //salvar no arquivo
+        CriarCsv.salvarProdutoList(listaProduto, path);
     }
 
-    static void subMenuProdutos(Scanner sc, List<Produto> listaProduto){
+    static void subMenuProdutos(Scanner sc, List<Produto> listaProduto, Path path) throws IOException {
         boolean voltar = false;
 
         while (!voltar) {
@@ -85,10 +90,10 @@ public class MenuProduto {
                     voltar = true;
                     break;
                 case 1:
-                    produtoInserir(sc, listaProduto);
+                    produtoInserir(sc, listaProduto, path);
                     break;
                 case 2:
-                    produtoAlterar(sc, listaProduto);
+                    produtoAlterar(sc, listaProduto, path);
                     break;
                 case 3:
                     produtoListar(listaProduto);

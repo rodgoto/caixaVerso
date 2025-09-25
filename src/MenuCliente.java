@@ -1,10 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuCliente {
 
-    static void subMenuClientes(Scanner sc, List<Cliente> listaCliente){
+    static void subMenuClientes(Scanner sc, List<Cliente> listaCliente, Path path) throws IOException {
         boolean voltar = false;
 
         while (!voltar) {
@@ -31,10 +33,10 @@ public class MenuCliente {
                     voltar = true;
                     break;
                 case 1:
-                    clienteInserir(sc, listaCliente);
+                    clienteInserir(sc, listaCliente, path);
                     break;
                 case 2:
-                    clienteAlterar(sc, listaCliente);
+                    clienteAlterar(sc, listaCliente, path);
                     break;
                 case 3:
                     clienteListar(listaCliente);
@@ -45,7 +47,7 @@ public class MenuCliente {
         }
     }
 
-    private static void clienteAlterar(Scanner sc, List<Cliente> listaCliente) {
+    private static void clienteAlterar(Scanner sc, List<Cliente> listaCliente, Path path) throws IOException {
         System.out.print("Informe o código do cliente a ser alterado: ");
         int codigoCliente = sc.nextInt();
 
@@ -67,6 +69,9 @@ public class MenuCliente {
                 cliente.setDocumento(documentoCliente);
                 System.out.println("Cliente atualizado com sucesso.");
 
+                //salvar no arquivo
+                CriarCsv.salvarClienteList(listaCliente, path);
+
                 break;
             }
         }
@@ -76,7 +81,7 @@ public class MenuCliente {
         }
     }
 
-    private static void clienteInserir(Scanner sc, List<Cliente> listaCliente){
+    private static void clienteInserir(Scanner sc, List<Cliente> listaCliente, Path path) throws IOException {
         System.out.print("Nome: ");
         String nomeCliente = sc.nextLine();
         System.out.print("Documento: ");
@@ -90,6 +95,9 @@ public class MenuCliente {
         Cliente cliente = new Cliente(codigoCliente, nomeCliente, documentoCliente);
         System.out.println("Cliente inserido com sucesso.");
         listaCliente.add(cliente);
+
+        //salvar no arquivo
+        CriarCsv.salvarClienteList(listaCliente, path);
     }
 
     private static void clienteListar(List<Cliente> listaCliente){
